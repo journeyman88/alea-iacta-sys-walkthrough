@@ -20,8 +20,10 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import net.unknowndomain.alea.dice.standard.D12;
-import net.unknowndomain.alea.pools.DicePool;
+import net.unknowndomain.alea.random.SingleResult;
+import net.unknowndomain.alea.random.SingleResultComparator;
+import net.unknowndomain.alea.random.dice.DicePool;
+import net.unknowndomain.alea.random.dice.bag.D12;
 import net.unknowndomain.alea.roll.GenericResult;
 import net.unknowndomain.alea.roll.GenericRoll;
 
@@ -78,27 +80,24 @@ public class WalkthroughRoll implements GenericRoll
     @Override
     public GenericResult getResult()
     {
-        List<Integer> actionRes = this.actionPool.getResults();
+        List<SingleResult<Integer>> actionRes = this.actionPool.getResults();
         WalkthroughResults results = buildResults(actionRes);
         results.setVerbose(mods.contains(WalkthroughModifiers.VERBOSE));
         return results;
     }
     
-    private WalkthroughResults buildResults(List<Integer> actionRes)
+    private WalkthroughResults buildResults(List<SingleResult<Integer>> actionRes)
     {
         int mod = favorLevel -1;
-        int o = -1;
+        boolean desc = true;
         if (favorLevel < 0)
         {
-            o = 1;
+            desc = false;
             mod = favorLevel +1 ;
         }
-        final int ord = o;
-        actionRes.sort((Integer o1, Integer o2) ->
-        {
-            return ord * o1.compareTo(o2);
-        });
-        Integer res = feature + actionRes.get(0) + actionRes.get(1) + mod;
+        SingleResultComparator<Integer> comp = new SingleResultComparator<>(desc);
+        actionRes.sort(comp);
+        Integer res = feature + actionRes.get(0).getValue() + actionRes.get(1).getValue() + mod;
         if (mods.contains(WalkthroughModifiers.SKILL_LEVEL_GOLD))
         {
             res += 2;

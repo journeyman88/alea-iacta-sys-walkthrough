@@ -20,6 +20,7 @@ import java.util.Collections;
 import java.util.List;
 import net.unknowndomain.alea.messages.MsgBuilder;
 import net.unknowndomain.alea.messages.MsgStyle;
+import net.unknowndomain.alea.random.SingleResult;
 import net.unknowndomain.alea.roll.GenericResult;
 
 /**
@@ -28,18 +29,18 @@ import net.unknowndomain.alea.roll.GenericResult;
  */
 public class WalkthroughResults extends GenericResult
 {
-    private final List<Integer> diceResults;
+    private final List<SingleResult<Integer>> diceResults;
     private final Integer totalResult;
     
-    public WalkthroughResults(List<Integer> diceResults, Integer totalResult)
+    public WalkthroughResults(List<SingleResult<Integer>> diceResults, Integer totalResult)
     {
-        List<Integer> tmp = new ArrayList<>(diceResults.size());
+        List<SingleResult<Integer>> tmp = new ArrayList<>(diceResults.size());
         tmp.addAll(diceResults);
         this.diceResults = Collections.unmodifiableList(tmp);
         this.totalResult = totalResult;
     }
     
-    public List<Integer> getDiceResults()
+    public List<SingleResult<Integer>> getDiceResults()
     {
         return diceResults;
     }
@@ -54,9 +55,10 @@ public class WalkthroughResults extends GenericResult
         {
             messageBuilder.append(indent).append("Roll ID: ").append(getUuid()).appendNewLine();
             messageBuilder.append("Dice Results: ").append(" [ ");
-            for (Integer t : getDiceResults())
+            for (SingleResult<Integer> t : getDiceResults())
             {
-                messageBuilder.append(t).append(" ");
+                messageBuilder.append("( ").append(t.getLabel()).append(" => ");
+                messageBuilder.append(t.getValue()).append(") ");
             }
             messageBuilder.append("]").appendNewLine();
         }
