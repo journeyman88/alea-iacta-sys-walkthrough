@@ -19,16 +19,17 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import net.unknowndomain.alea.messages.MsgBuilder;
-import net.unknowndomain.alea.messages.MsgStyle;
 import net.unknowndomain.alea.random.SingleResult;
-import net.unknowndomain.alea.roll.GenericResult;
+import net.unknowndomain.alea.roll.LocalizedResult;
 
 /**
  *
  * @author journeyman
  */
-public class WalkthroughResults extends GenericResult
+public class WalkthroughResults extends LocalizedResult
 {
+    private static final String BUNDLE_NAME = "net.unknowndomain.alea.systems.walkthrough.RpgSystemBundle";
+    
     private final List<SingleResult<Integer>> diceResults;
     private final Integer totalResult;
     
@@ -49,12 +50,12 @@ public class WalkthroughResults extends GenericResult
     protected void formatResults(MsgBuilder messageBuilder, boolean verbose, int indentValue)
     {
         String indent = getIndent(indentValue);
-        messageBuilder.append("Result: ").append(totalResult);
+        messageBuilder.append(translate("walkthrough.results.total", totalResult));
         messageBuilder.appendNewLine();
         if (verbose)
         {
             messageBuilder.append(indent).append("Roll ID: ").append(getUuid()).appendNewLine();
-            messageBuilder.append("Dice Results: ").append(" [ ");
+            messageBuilder.append(translate("walkthrough.results.diceResults")).append(" [ ");
             for (SingleResult<Integer> t : getDiceResults())
             {
                 messageBuilder.append("( ").append(t.getLabel()).append(" => ");
@@ -62,6 +63,13 @@ public class WalkthroughResults extends GenericResult
             }
             messageBuilder.append("]").appendNewLine();
         }
+    }
+
+
+    @Override
+    protected String getBundleName()
+    {
+        return BUNDLE_NAME;
     }
     
 }

@@ -19,6 +19,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Locale;
 import java.util.Set;
 import net.unknowndomain.alea.random.SingleResult;
 import net.unknowndomain.alea.random.SingleResultComparator;
@@ -38,13 +39,14 @@ public class WalkthroughRoll implements GenericRoll
     private final int feature;
     private final int favorLevel;
     private final Set<WalkthroughModifiers> mods;
+    private final Locale lang;
     
-    public WalkthroughRoll(Integer feature, Integer medals, WalkthroughModifiers ... mod)
+    public WalkthroughRoll(Locale lang, Integer feature, Integer medals, WalkthroughModifiers ... mod)
     {
-        this(feature, medals, Arrays.asList(mod));
+        this(lang, feature, medals, Arrays.asList(mod));
     }
     
-    public WalkthroughRoll(Integer feature, Integer medals, Collection<WalkthroughModifiers> mod)
+    public WalkthroughRoll(Locale lang, Integer feature, Integer medals, Collection<WalkthroughModifiers> mod)
     {
         this.mods = new HashSet<>();
         if (mod != null)
@@ -75,6 +77,7 @@ public class WalkthroughRoll implements GenericRoll
         this.actionPool = new DicePool<>(D12.INSTANCE, dice);
         this.feature = feature;
         this.favorLevel = favorLevel;
+        this.lang = lang;
     }
     
     @Override
@@ -83,6 +86,7 @@ public class WalkthroughRoll implements GenericRoll
         List<SingleResult<Integer>> actionRes = this.actionPool.getResults();
         WalkthroughResults results = buildResults(actionRes);
         results.setVerbose(mods.contains(WalkthroughModifiers.VERBOSE));
+        results.setLang(lang);
         return results;
     }
     

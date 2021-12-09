@@ -15,10 +15,8 @@
  */
 package net.unknowndomain.alea.systems.walkthrough;
 
-import java.util.HashSet;
 import java.util.Locale;
 import java.util.Optional;
-import java.util.Set;
 import net.unknowndomain.alea.systems.RpgSystemCommand;
 import net.unknowndomain.alea.systems.RpgSystemDescriptor;
 import net.unknowndomain.alea.roll.GenericRoll;
@@ -64,7 +62,7 @@ public class WalkthroughCommand extends RpgSystemCommand
         else
         {
             WalkthroughOptions opt = (WalkthroughOptions) options;
-            WalkthroughRoll roll = new WalkthroughRoll(opt.getFeatureLevel(), opt.getMedalsSpent(), opt.getModifiers());
+            WalkthroughRoll roll = new WalkthroughRoll(lang, opt.getFeatureLevel(), opt.getMedalsSpent(), opt.getModifiers());
             retVal = Optional.of(roll);
         }
         return retVal;
